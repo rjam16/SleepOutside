@@ -5,15 +5,20 @@ loadHeaderFooter()
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
-  const htmlItems = cartItems.map((item) => cartItemTemplate(item));
-  document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  if (cartItems){
+    const htmlItems = cartItems.map((item) => cartItemTemplate(item));
+    document.querySelector(".product-list").innerHTML = htmlItems.join("");
+  } else {
+    document.querySelector(".checkout-button").computedStyleMap.display = "none";
+    document.querySelector(".product-list").innerHTML = "<li>The cart is empty</li>"
+  }
 }
 
 function cartItemTemplate(item) {
   const newItem = `<li class="cart-card divider">
   <a href="#" class="cart-card__image">
     <img
-      src="${item.Image}"
+      src="${item.Images.PrimaryExtraLarge}"
       alt="${item.Name}"
     />
   </a>
