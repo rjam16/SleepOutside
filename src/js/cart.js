@@ -1,7 +1,10 @@
 import { getLocalStorage } from "./utils.mjs";
 import {loadHeaderFooter} from "./utils.mjs";
+import ShoppingCart from "./ShoppingCart.mjs";
 
-loadHeaderFooter()
+loadHeaderFooter();
+
+const cart = new ShoppingCart("so-cart", ".product-list");
 
 function renderCartContents() {
   const cartItems = getLocalStorage("so-cart");
@@ -12,6 +15,24 @@ function renderCartContents() {
     document.querySelector(".checkout-button").computedStyleMap.display = "none";
     document.querySelector(".product-list").innerHTML = "<li>The cart is empty</li>"
   }
+}
+
+cart.renderCartContents();
+
+const showTotal = getLocalStorage("so-cart");
+if (showTotal.length !== 0) {
+  document.querySelector(".cart-footer").classList.remove("hide");
+  const cartPrice = localStorage.getItem("so-cart");
+  const cartItem = JSON.parse(cartPrice);
+
+  let totalPrice = 0;
+  cartItem.forEach(item => {
+    const price = item.FinalPrice * item.quantity;
+    totalPrice += price;
+  })
+
+  document.querySelector(".cart-total").textContent += `$${totalPrice.toFixed(2)}`;
+
 }
 
 function cartItemTemplate(item) {
